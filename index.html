@@ -1,0 +1,303 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Health Quiz</title>
+<style>
+*{box-sizing:border-box}
+body{background:#fff;margin:0;padding:20px;font-family:Geneva,Arial,Helvetica,sans-serif;color:#000}
+.quiz-container{max-width:900px;margin:0 auto;padding:0}
+.intro{font-size:22px;text-align:center;line-height:1.5;margin:0 0 30px}
+.question{display:block;margin:10px 0;line-height:1.5}
+.question input{margin-right:8px}
+.follow-up{display:none;margin:8px 0 16px 25px;padding:12px 18px;background:#f7f7f7;border-left:3px solid #999}
+.quiz-actions{margin-top:30px}
+.quiz-actions input{padding:10px 22px;margin:0 10px 10px 0;border:1px solid #555;background:#333;color:#fff;cursor:pointer;font-size:16px}
+.quiz-actions input[name="reset"]{background:#fff;color:#333}
+.results{margin-top:25px;overflow-wrap:anywhere}
+.results h2{font-size:20px;font-weight:normal;line-height:1.5;margin:12px 0}
+#txt03{margin-top:25px;line-height:1.6;font-size:16px;font-weight:normal}
+a{color:#333}
+.disclaimer{margin-top:30px;padding-top:15px;border-top:1px solid #ddd;color:#555;font-size:13px;line-height:1.6}
+@media(max-width:600px){
+body{padding:12px}
+.intro{font-size:19px}
+.quiz-actions input{display:block;width:100%;margin:10px 0}
+.follow-up{margin-left:12px;padding:10px}
+}
+</style>
+</head>
+<body>
+<div class="quiz-container">
+<p class="intro">Check the boxes which apply to you; go with your first reaction on reading each statement. Not every box will require a tick. When you're finished, use the Calculate button at the end to see suggested remedies.</p>
+<form id="healthQuiz">
+<div id="questions"></div>
+<div class="quiz-actions">
+<input type="button" value="Calculate" id="calculate">
+<input type="reset" name="reset" value="Reset Form" id="reset">
+</div>
+<div class="results" aria-live="polite">
+<h2 id="txt01">Your results will appear here.</h2>
+<h2 id="txt02"></h2>
+<h3 id="txt03" style="display:none">For information about the suggested remedies, contact <a href="mailto:bcominghealthy@gmail.com">bcominghealthy@gmail.com</a>.</h3>
+</div>
+<p class="disclaimer"><strong>Disclaimer:</strong> This quiz is for general informational and educational purposes only. Its results are based on your selected answers and are not a medical assessment, diagnosis, or evidence-based treatment recommendation. Bach flower remedies have not been shown by reliable scientific evidence to effectively treat health conditions. This quiz is not a substitute for advice, diagnosis, or treatment from a qualified healthcare professional. Do not delay seeking medical advice or stop or change prescribed treatment based on these results. If you have physical or mental health concerns, please consult a qualified healthcare professional.</p>
+</form>
+</div>
+<script>
+(function(){
+"use strict";
+var questions=[
+["q01","I hide my feelings behind a facade of cheerfulness","agrimony"],
+["q02","I dislike arguments and often give in to avoid conflict",null,[["h01","Because I want to please","centaury"],["h02","Because I don't want to show emotions","agrimony"]]],
+["q03","I turn to food, work, alcohol, drugs, etc. when down","agrimony"],
+["q04","I feel anxious without knowing why","aspen"],
+["q05","I have a secret fear that something bad will happen","aspen"],
+["q06","I wake up feeling anxious","aspen"],
+["q07","I get annoyed by the habits of others","beach"],
+["q08","I focus on others' mistakes","beach"],
+["q09","I am critical and intolerant","beach"],
+["q10","I often neglect my own needs to please","centaury"],
+["q11","I find it difficult to say no","centaury"],
+["q12","I tend to be easily influenced","centaury"],
+["q13","I constantly second-guess myself","cerato"],
+["q14","I seek advice, mistrusting my own intuition","cerato"],
+["q15","I often change my mind out of confusion","cerato"],
+["q16","I'm afraid I might lose control of myself","cherry"],
+["q17","I have sudden fits of rage","cherry"],
+["q18","I feel like I'm going crazy","cherry"],
+["q19","I make the same mistakes over and over","chestnut"],
+["q20","I don't learn from my experience","chestnut"],
+["q21","I keep repeating the same patterns","chestnut"],
+["q22","I need to be needed and want my loved ones close","chicory"],
+["q23","I feel unloved and unappreciated by my family","chicory"],
+["q24","I easily feel slighted and hurt","chicory"],
+["q25","I often feel spacey and absent minded","clematis"],
+["q26","I find myself unable to concentrate for long","clematis"],
+["q27","I get drowsy and sleep more than necessary","clematis"],
+["q28","I am overly concerned with cleanliness","crabApple"],
+["q29","I feel unclean or physically unattractive","crabApple"],
+["q30","I tend to obsess over little things","crabApple"],
+["q31","I feel overwhelmed by my responsibilities","elm"],
+["q32","I don't cope well under pressure","elm"],
+["q33","I have temporarily lost my self-confidence","elm"],
+["q34","I become discouraged with small setbacks","gentian"],
+["q35","I am easily disheartened when faced with difficulties","gentian"],
+["q36","I am often skeptical and pessimistic","gentian"],
+["q37","I feel hopeless, and can't see a way out","gorse"],
+["q38","I lack faith that things could get better in my life","gorse"],
+["q39","I feel sullen and depressed","gorse"],
+["q40","I am obsessed with my own troubles","heather"],
+["q41","I dislike being alone and I like to talk","heather"],
+["q42","I am suspicious of others","holly"],
+["q43","I feel discontented and unhappy","holly"],
+["q44","I am full of jealousy, mistrust, or hate","holly"],
+["q45","I'm often homesick for the way it was","honeysuckle"],
+["q46","I think more about the past than the present","honeysuckle"],
+["q47","I often think about what might have been","honeysuckle"],
+["q48","I often feel too tired to face the day ahead",null,[["h03","Once I begin things my energy returns","hornbeam"],["h04","And this feeling continues all day long on physical and mental level","olive"],["h05","Because I'm resigned to live my life as it is","wildRose"]]],
+["q49","I feel mentally exhausted","hornbeam"],
+["q50","I tend to put things off","hornbeam"],
+["q51","I find it hard to wait for things","impatiens"],
+["q52","I am impatient and irritable","impatiens"],
+["q53","I prefer to work alone",null,[["h06","Because I prefer my own company","waterViolet"],["h07","Because people can't work as well, or as fast, as I can","impatiens"]]],
+["q54","I lack self-confidence","larch"],
+["q55","I feel inferior and often become discouraged","larch"],
+["q56","I never expect anything but failure","larch"],
+["q57","I am afraid of things such as spiders, illness, etc.","mimulus"],
+["q58","I am shy, overly sensitive, and modest","mimulus"],
+["q59","I get nervous and embarrassed","mimulus"],
+["q60","I get depressed without any reason","mustard"],
+["q61","I feel my moods swinging back and forth","mustard"],
+["q62","I get gloomy feelings that come and go","mustard"],
+["q63","I tend to overwork and keep on in spite of exhaustion",null,[["h08","Because I want to keep others happy","centaury"],["h09","Because I feel I should, in order to complete the job","oak"]]],
+["q64","I have a strong sense of duty and never give up","oak"],
+["q65","I neglect my own needs in order to complete a task","oak"],
+["q66","I feel completely exhausted, physically and/or mentally","olive"],
+["q67","I am totally drained of all energy with no reserves left","olive"],
+["q68","I have just been through a long period of illness or stress","olive"],
+["q69","I feel unworthy and inferior","pine"],
+["q70","I often feel guilty","pine"],
+["q71","I blame myself for everything that goes wrong","pine"],
+["q72","I am overly concerned and worried about my loved ones","redChestnut"],
+["q73","I am distressed and disturbed by other people's problems","redChestnut"],
+["q74","I worry that harm may come to those I love","redChestnut"],
+["q75","I sometimes feel terror and panic","rockRose"],
+["q76","I become helpless and frozen when afraid","rockRose"],
+["q77","I suffer from nightmares","rockRose"],
+["q78","I set high standards for myself","rockWater"],
+["q79","I am strict with my health, work and/or spiritual discipline","rockWater"],
+["q80","I am very self-disciplined, always striving for perfection","rockWater"],
+["q81","I find it difficult to make decisions","scleranthus"],
+["q82","I often change my opinions","scleranthus"],
+["q83","I have intense mood swings","scleranthus"],
+["q84","I feel devastated due to a recent shock","bethlehem"],
+["q85","I am withdrawn due to traumatic events in my life","bethlehem"],
+["q86","I have never recovered from loss or fright","bethlehem"],
+["q87","I feel extreme mental or emotional heartache","sweetChestnut"],
+["q88","I have reached the limits of my endurance","sweetChestnut"],
+["q89","I am in complete despair, all hope gone","sweetChestnut"],
+["q90","I get high-strung and very intense","vervain"],
+["q91","I try to convince others of my way of thinking","vervain"],
+["q92","I am sensitive to injustice, almost fanatical","vervain"],
+["q93","I tend to take charge of projects, situations, etc.","vine"],
+["q94","I consider myself a natural leader","vine"],
+["q95","I am strong-willed, ambitious and often bossy","vine"],
+["q96","I am experiencing change in my life—a move, new job, etc.","walnut"],
+["q97","I get drained by people or situations","walnut"],
+["q98","I want to be free to follow my own ambitions","walnut"],
+["q99","I give the impression that I'm aloof","waterViolet"],
+["q100","I prefer to be alone when overwhelmed","waterViolet"],
+["q101","I often don't connect with people","waterViolet"],
+["q102","I am constantly thinking unwanted thoughts","whiteChestnut"],
+["q103","I relive unhappy events or arguments over and over again","whiteChestnut"],
+["q104","I am unable to sleep at times because I can't stop thinking","whiteChestnut"],
+["q105","I can't find my path in life",null,[["h10","Because I'm trying to work out what will make others happy","centaury"],["h11","Because there are so many things I want to do","wildOat"]]],
+["q106","I am drifting in life and lack direction","wildOat"],
+["q107","I am ambitious but don't know what to do","wildOat"],
+["q108","I am apathetic and resigned to whatever happens",null,[["h12","But I'm willing to try new things that may help","gorse"],["h13","Because I can't control what happens anyway","wildRose"]]],
+["q109","I have the attitude, It doesn't matter anyhow","wildRose"],
+["q110","I feel no joy in life","wildRose"],
+["q111","I feel resentful and bitter",null,[["h14","Because of an injustice that has occurred","vervain"],["h15","And these feelings are explosive","holly"],["h16","Because I feel unappreciated by those I love","chicory"],["h17","Because it just isn't fair, and I don't deserve such things to happen","willow"]]],
+["q112","I have difficulty forgiving and forgetting","willow"],
+["q113","I think life is unfair and have a Poor me attitude","willow"]
+];
+var names={
+agrimony:"Agrimony",aspen:"Aspen",beach:"Beach",centaury:"Centaury",
+cerato:"Cerato",cherry:"Cherry Plum",chestnut:"Chestnut Bud",
+chicory:"Chicory",clematis:"Clematis",crabApple:"Crab Apple",
+elm:"Elm",gentian:"Gentian",gorse:"Gorse",heather:"Heather",
+holly:"Holly",honeysuckle:"Honeysuckle",hornbeam:"Hornbeam",
+impatiens:"Impatiens",larch:"Larch",mimulus:"Mimulus",
+mustard:"Mustard",oak:"Oak",olive:"Olive",pine:"Pine",
+redChestnut:"Red Chestnut",rockRose:"Rock Rose",rockWater:"Rock Water",
+scleranthus:"Scleranthus",bethlehem:"Star of Bethlehem",
+sweetChestnut:"Sweet Chestnut",vervain:"Vervain",vine:"Vine",
+walnut:"Walnut",waterViolet:"Water Violet",
+whiteChestnut:"White Chestnut",wildOat:"Wild Oat",
+wildRose:"Wild Rose",willow:"Willow"
+};
+var host=document.getElementById("questions");
+var form=document.getElementById("healthQuiz");
+
+function addQuestion(item,parent){
+    var label=document.createElement("label");
+    label.className="question";
+    var input=document.createElement("input");
+    input.type="checkbox";
+    input.id=item[0];
+    input.name=item[0];
+    label.appendChild(input);
+    label.appendChild(document.createTextNode(" "+item[1]));
+    parent.appendChild(label);
+
+    if(item[3]){
+        var panel=document.createElement("div");
+        panel.className="follow-up";
+        panel.id="d"+item[0].substring(1);
+        parent.appendChild(panel);
+        item[3].forEach(function(child){addQuestion(child,panel);});
+
+        input.addEventListener("change",function(){
+            panel.style.display=input.checked?"block":"none";
+            if(!input.checked){
+                panel.querySelectorAll('input[type="checkbox"]').forEach(function(childInput){
+                    childInput.checked=false;
+                });
+            }
+        });
+    }
+}
+questions.forEach(function(item){addQuestion(item,host);});
+
+function formatList(list){
+    if(list.length===1)return list[0];
+    if(list.length===2)return list[0]+" and "+list[1];
+    return list.slice(0,-1).join(", ")+", and "+list[list.length-1];
+}
+
+function calculate(){
+    var scores={};
+    Object.keys(names).forEach(function(key){scores[key]=0;});
+
+    questions.forEach(function(item){
+        var input=document.getElementById(item[0]);
+        if(!input||!input.checked)return;
+
+        if(item[2])scores[item[2]]++;
+
+        if(item[3]){
+            item[3].forEach(function(child){
+                var childInput=document.getElementById(child[0]);
+                if(childInput&&childInput.checked&&child[2]){
+                    scores[child[2]]++;
+                }
+            });
+        }
+    });
+
+    var strong=[];
+    var also=[];
+
+    Object.keys(names).forEach(function(key){
+        var score=scores[key];
+        var strongThreshold=key==="centaury"?3:2;
+        var alsoThreshold=key==="heather"?0:1;
+
+        if(score>strongThreshold)strong.push(names[key]);
+        else if(score>alsoThreshold)also.push(names[key]);
+    });
+
+    var total=strong.length+also.length;
+    var first=strong.length?"We strongly recommend: "+formatList(strong):"";
+    var second=also.length?"We also recommend: "+formatList(also):"";
+    var message="";
+
+    if(total===0){
+        message="No remedies met the quiz's recommendation thresholds. You may wish to review your answers.";
+    }else if(total>7){
+        message="Please review your answers, as more than seven remedies met the quiz's thresholds. Select the statements that best reflect your first reaction.";
+        first="";
+        second="";
+    }
+
+    var txt01=document.getElementById("txt01");
+    var txt02=document.getElementById("txt02");
+    var txt03=document.getElementById("txt03");
+
+    if(message){
+        txt01.textContent=message;
+        txt02.textContent="";
+        txt02.style.display="none";
+    }else if(first&&second){
+        txt01.textContent=first;
+        txt02.textContent=second;
+        txt02.style.display="block";
+    }else{
+        txt01.textContent=first||second;
+        txt02.textContent="";
+        txt02.style.display="none";
+    }
+
+    txt03.style.display=total>0&&total<=7?"block":"none";
+}
+
+document.getElementById("calculate").addEventListener("click",calculate);
+
+form.addEventListener("reset",function(){
+    window.setTimeout(function(){
+        document.querySelectorAll(".follow-up").forEach(function(panel){
+            panel.style.display="none";
+        });
+        document.getElementById("txt01").textContent="Your results will appear here.";
+        document.getElementById("txt02").textContent="";
+        document.getElementById("txt02").style.display="block";
+        document.getElementById("txt03").style.display="none";
+    },0);
+});
+})();
+</script>
+</body>
+</html>
