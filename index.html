@@ -31,7 +31,7 @@ body{padding:12px}
 </head>
 <body>
 <div class="quiz-container">
-<p class="intro">Check the boxes which apply to you; go with your first reaction on reading each statement. Not every box will require a tick. When you're finished, use the Calculate button at the end to see suggested remedies.</p>
+
 <form id="healthQuiz">
 <div id="questions"></div>
 <div class="quiz-actions">
@@ -41,7 +41,7 @@ body{padding:12px}
 <div class="results" aria-live="polite">
 <h2 id="txt01">Your results will appear here.</h2>
 <h2 id="txt02"></h2>
-<h3 id="txt03" style="display:none">For information about the suggested remedies, contact <a href="mailto:bcominghealthy@gmail.com">bcominghealthy@gmail.com</a>.</h3>
+<h3 id="txt03" style="display:none">For information about the suggested remedies, contact <a href="mailto:becominghealthynz@gmail.com">bcominghealthy@gmail.com</a>.</h3>
 </div>
 <p class="disclaimer"><strong>Disclaimer:</strong> This quiz is for general informational and educational purposes only. Its results are based on your selected answers and are not a medical assessment, diagnosis, or evidence-based treatment recommendation. Bach flower remedies have not been shown by reliable scientific evidence to effectively treat health conditions. This quiz is not a substitute for advice, diagnosis, or treatment from a qualified healthcare professional. Do not delay seeking medical advice or stop or change prescribed treatment based on these results. If you have physical or mental health concerns, please consult a qualified healthcare professional.</p>
 </form>
@@ -50,15 +50,15 @@ body{padding:12px}
 (function(){
 "use strict";
 var questions=[
-["q01","I hide my feelings behind a facade of cheerfulness","agrimony"],
-["q02","I dislike arguments and often give in to avoid conflict",null,[["h01","Because I want to please","centaury"],["h02","Because I don't want to show emotions","agrimony"]]],
-["q03","I turn to food, work, alcohol, drugs, etc. when down","agrimony"],
+["q01","I hide my feelings behind a facade of cheerfulness","Agrimony"],
+["q02","I dislike arguments and often give in to avoid conflict",null,[["h01","Because I want to please","centaury"],["h02","Because I don't want to show emotions","Agrimony"]]],
+["q03","I turn to food, work, alcohol, drugs, etc. when down","Agrimony"],
 ["q04","I feel anxious without knowing why","aspen"],
 ["q05","I have a secret fear that something bad will happen","aspen"],
 ["q06","I wake up feeling anxious","aspen"],
-["q07","I get annoyed by the habits of others","beach"],
-["q08","I focus on others' mistakes","beach"],
-["q09","I am critical and intolerant","beach"],
+["q07","I get annoyed by the habits of others","beech"],
+["q08","I focus on others' mistakes","beech"],
+["q09","I am critical and intolerant","beech"],
 ["q10","I often neglect my own needs to please","centaury"],
 ["q11","I find it difficult to say no","centaury"],
 ["q12","I tend to be easily influenced","centaury"],
@@ -165,7 +165,7 @@ var questions=[
 ["q113","I think life is unfair and have a Poor me attitude","willow"]
 ];
 var names={
-agrimony:"Agrimony",aspen:"Aspen",beach:"Beach",centaury:"Centaury",
+Agrimony:"Agrimony",aspen:"Aspen",Beech:"Beech",centaury:"Centaury",
 cerato:"Cerato",cherry:"Cherry Plum",chestnut:"Chestnut Bud",
 chicory:"Chicory",clematis:"Clematis",crabApple:"Crab Apple",
 elm:"Elm",gentian:"Gentian",gorse:"Gorse",heather:"Heather",
